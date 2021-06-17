@@ -5,13 +5,13 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV LC_ALL C.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
-ENV SDCCDIR=/opt/sdcc
+#ENV SDCCDIR=/opt/sdcc
 
 RUN dpkg --add-architecture i386 && \
   apt-get update && apt-get -y install gnupg2 wget libboost-dev && \
   wget -O - https://dl.winehq.org/wine-builds/winehq.key | apt-key add - && \
   echo 'deb https://dl.winehq.org/wine-builds/ubuntu/ xenial main' |tee /etc/apt/sources.list.d/winehq.list && \
-  apt-get update && apt-get -y install winehq-stable zenity libncurses5 unzip git build-essential byacc bison \
+  apt-get update && apt-get -y install winehq-stable zenity libncurses5 libncurses5:i386 unzip git build-essential byacc bison \
     flex pkg-config gawk libpng-dev xvfb x11vnc xdotool tar supervisor net-tools fluxbox && \
   mkdir /opt/wine-stable/share/wine/mono && wget -O - https://dl.winehq.org/wine/wine-mono/4.9.4/wine-mono-bin-4.9.4.tar.gz |tar -xzv -C /opt/wine-stable/share/wine/mono && \
   mkdir /opt/wine-stable/share/wine/gecko && wget -O /opt/wine-stable/share/wine/gecko/wine-gecko-2.47.1-x86.msi https://dl.winehq.org/wine/wine-gecko/2.47.1/wine-gecko-2.47.1-x86.msi && \
@@ -26,8 +26,7 @@ RUN dpkg --add-architecture i386 && \
   cd /opt/gbmb && wget http://www.devrs.com/gb/hmgd/gbmb18.zip && unzip gbmb18.zip && rm gbmb18.zip && \
   cd /opt/bgb && wget http://bgb.bircd.org/bgb.zip && unzip bgb.zip && rm bgb.zip && \
   git clone https://github.com/chrisantonellis/gbtdg.git /opt/novnc/gbtdg && \
-  cd /opt && wget -O sdcc.tbz "https://downloads.sourceforge.net/project/sdcc/snapshot_builds/amd64-unknown-linux2.5/sdcc-snapshot-amd64-unknown-linux2.5-20200517-11615.tar.bz2?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fsdcc%2Ffiles%2Fsnapshot_builds%2Famd64-unknown-linux2.5%2Fsdcc-snapshot-amd64-unknown-linux2.5-20200517-11615.tar.bz2%2Fdownload&ts=1589825291&use_mirror=autoselect" && tar xjf sdcc.tbz && rm sdcc.tbz && \
-  git clone https://github.com/Zal0/gbdk-2020.git /opt/gbdk && cd /opt/gbdk && make && make install
+  wget https://github.com/gbdk-2020/gbdk-2020/releases/latest/download/gbdk-linux64.tar.gz && tar xf gbdk-linux64.tar.gz -C /opt && rm gbdk-linux64.tar.gz
 
 # TODO install js/wasm-based tools?
 
@@ -49,5 +48,12 @@ EXPOSE 8080
 ENV HOME /home/gbdev
 WORKDIR /home/gbdev
 VOLUME /home/gbdev
+
+COPY bgb.ini /opt/bgb/bgb.ini
+RUN chmod 666 /opt/bgb/bgb.ini
+COPY gbtd.ini /opt/gbtd/gbtd.ini
+RUN chmod 666 /opt/gbtd/gbtd.ini
+COPY gbmb.ini /opt/gbmb/gbmb.ini
+RUN chmod 666 /opt/gbmb/gbmb.ini
 
 CMD ["/usr/bin/supervisord"]
