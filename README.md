@@ -1,65 +1,104 @@
-This is a docker-based full toolkit for developing gameboy games.
+# vscode-remote-gb-dev
 
-![screeenshot](./screenshot.png)
+Preparing for the OJYUKEN = VSCode + Docker + GBDK-2020
 
-All you need is docker, and it should run on any OS:
 
-```sh
-mkdir work
-docker run --name='gb' --rm -it -p 8080:8080 -v "${PWD}/work:/home/gbdev" konsumer/gb
+# Get Started
+
+This template is the development environment template for GB.
+
+With the combination of VSCode and Docker, GBDK-2020, you can easily start developing right away. Of course, you can also emulate your compiled GB application.
+
+## Requirements  
+
+Install the following tools.  
+
+1. [git](https://git-scm.com/)
+1. [VSCode](https://code.visualstudio.com/download)
+1. [Docker](https://www.docker.com/)
+
+If you want to create your repository by `use this template`, [sign up](https://github.com/signup) and sign in github.
+
+# How to use
+
+## Use this template
+
+1. Open the repository on github.  
+   https://github.com/ojyuken/vscode-remote-gb-dev
+
+1. Click `Use this template`.  
+   [Here - https://github.com/ojyuken/vscode-remote-gb-dev/generate](https://github.com/ojyuken/vscode-remote-gb-dev/generate)
+
+
+## git clone
+
+1. Open the command prompt and run below commands.
+
+```CommandPrompt.cmd
+mkdir c:\workgit
+cd c:\workgit
+git clone <your GitHub Code URL>
 ```
 
-Then open http://localhost:8080
+## VSCode, Reopen in Container
 
-A bunch of tools are installed, with an X-windows server, that runs VNC. It's got fluxbox and some windows tools setup with wine.
+1. Open the git cloned folder in VSCode.  
+1. Install the "Remote - Containers" extension to VSCode.
+1. An icon for the extension "Remote - Containers" will be added to the bottom left corner of VSCode, click on that icon.  
+1. Select "Remote-Containers: Reopen in Container" from the list.
+1. The Docker container will start and you will be able to develop remotely from VSCode.
 
-I also included [gbtdg](https://github.com/chrisantonellis/gbtdg) which is great for making splash images, at http://localhost:8080/gbtdg/
 
-`/home/gbdev` is meant to be your working directory, as you are logged in as `gbdev`. This helps with permissions on mac/linux, as it makes it all run as user-1. In the above `docker run` example, I am volume-mounting it to a dir `work/`, so I can compile stuff in that dir. You can mount it however you like, though.
+## GB development tools
 
-Some useful things to do:
+GB development tools installed, `/opt`.
 
-```sh
-# run text-mode bash inside container
-docker exec -it gb bash
+1. gbdk-2020 - /opt/gbdk
+1. rgbds - /opt/rgbds
 
-## inside container
+Open http://localhost:8080, then select the fluxbox menu (right-click on desktop.)  
+You can use the following tools via noVNC:
 
-# run Gameboy Tile Designer
-wine /opt/gbtd/GBTD.EXE
+1. gameboy tile designer (gbtd)
+1. gameboy map builder (gbmb)
+1. gameboy emulator (bgb)
 
-# run Gameboy Map Builder
-wine /opt/gbmb/GBMB.EXE
+Also, it included gbtdg which is great for making splash images.  
+http://localhost:8080/gbtdg/
 
-# run BGB Gameboy Emulator
-wine /opt/bgb/bgb.exe
+## Example
+
+An example by [konsumer](https://github.com/konsumer/docker-gb-dev/tree/master/example) is included, so you can build and run it.
+
+Following commands, and then open http://localhost:8080.
+
 ```
-
-There is also GBDK/RGBDS installed in `/opt`, so you can use those in your makefiles. I also added some of these tools to the fluxbox menu (right-click on desktop.)
-
-If you want to try it out, put the `example/` dir in your work folder, and run this:
-
-```sh
-docker run --name='gb' -d --rm -p 8080:8080 -v "${PWD}/work:/home/gbdev" konsumer/gb
-docker exec -it konsumer/gb bash
-cd example
+cd /home/gbdev/workspace/.devcontainer/docker-gb-dev/example
 make
 wine /opt/bgb/bgb.exe demo.gb
-docker kill gb
 ```
 
-## more info
+You can also try [the gbdk-2020 examples](https://github.com/gbdk-2020/gbdk-2020/tree/develop/gbdk-lib/examples/gb) as well.
 
-Here are the tools installed in your environment:
+```
+cd /opt/gbdk/examples/gb
+```
 
-- [gbdk-2020](https://github.com/Zal0/gbdk-2020)
+
+# More Info
+
+Here are the tools installed in this environment:
+
+- [gbdk-2020](https://github.com/gbdk-2020/gbdk-2020) (Zal0 renamed to gbdk-2020)
 - [rgbds](https://github.com/rednex/rgbds)
 - [gameboy tile designer](http://www.devrs.com/gb/hmgd/gbtd.html) (via wine)
 - [gameboy map builder](http://www.devrs.com/gb/hmgd/gbmb.html) (via wine)
 - [bgb gameboy emulator](https://bgb.bircd.org/) (via wine)
 - [gameboy tile data generator](https://github.com/chrisantonellis/gbtdg) (running [on web](http://localhost:8080/gbtdg/))
+- [konsumer/docker-gb-dev](https://github.com/konsumer/docker-gb-dev) (this template forked from it.)
 
+The GB's homepage is [here](https://www.nintendo.co.jp/n02/dmg/index.html) (Japanese).
 
-## TODO
-
-* make a tutorial with demo project
+- [GAME BOY](https://www.nintendo.co.jp/n02/dmg/index.html)
+- [Hardware](https://www.nintendo.co.jp/n02/dmg/hardware/index.html)
+- [Option](https://www.nintendo.co.jp/n02/dmg/hardware/option/index.html)
